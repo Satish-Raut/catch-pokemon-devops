@@ -13,8 +13,9 @@ export const Pokemon = () => {
   const fetchPokemon = async () => {
     try {
       const responce = await fetch(API); // Fetch the Main API
+      // console.log(responce)
       const data = await responce.json();
-      //   console.log(data);
+      // console.log(data);
 
       const pokemonData = data.results.map(async (currPokemon) => {
         const responce = await fetch(currPokemon.url); // Fetching Api for Individual Pokemons
@@ -24,7 +25,7 @@ export const Pokemon = () => {
         return data;
       });
 
-      //   console.log(pokemonData); // All are Promises
+        // console.log(pokemonData); // All are Promises
       const detailedResponce = await Promise.all(pokemonData);
       //   console.log(detailedResponce);
 

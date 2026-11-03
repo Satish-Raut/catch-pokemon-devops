@@ -1,14 +1,13 @@
 
-
-
 # Catch Pokemon
 
-🚀 **Live Demo:** [https://pokemonword.netlify.app/](https://pokemonword.netlify.app/)  
-<a href="https://pokemonword.netlify.app/" target="_blank" style="font-size:1.2em; font-weight:bold; color:#e67e22;">👉 View the Project Live Here</a>
+🚀 **Live Demo:** [https://pokemonword.netlify.app](https://pokemonword.netlify.app)  
+<a href="https://pokemonword.netlify.app" target="_blank" style="font-size:1.2em; font-weight:bold; color:#e67e22;">👉 View the Project Live Here</a>
 
 A React project to fetch and display Pokémon data using the PokéAPI. The app features a responsive card layout, search functionality, and modern UI design.
 
 ## Features
+
 - Fetches Pokémon data from the PokéAPI
 - Displays Pokémon cards with images, types, stats, and abilities
 - Responsive grid layout for cards
@@ -18,30 +17,39 @@ A React project to fetch and display Pokémon data using the PokéAPI. The app f
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v16 or above recommended)
 - npm or yarn
 
 ### Installation
+
 1. Clone the repository:
+
    ```sh
    git clone https://github.com/Satish-Raut/Catch-Pokemon
    cd Catch-Pokemon
    ```
+
 2. Install dependencies:
+
    ```sh
    npm install
    # or
    yarn install
    ```
+
 3. Start the development server:
+
    ```sh
    npm run dev
    # or
    yarn dev
    ```
+
 4. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## Project Structure
+
 ```
 Catch Pokemon/
 ├── public/
@@ -57,6 +65,7 @@ Catch Pokemon/
 ```
 
 ## API Reference
+
 - [PokéAPI](https://pokeapi.co/)
 
 ## Notes & Learning Points
@@ -72,4 +81,3 @@ Catch Pokemon/
 ---
 
 Feel free to use this project as a reference for learning React, API integration, and responsive design!
-
