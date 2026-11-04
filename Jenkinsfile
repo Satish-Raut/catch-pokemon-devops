@@ -72,13 +72,37 @@ pipeline {
             steps {
                 sshagent(credentials: ['app-ec2-ssh']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=accept-new \
+                        ssh -o StrictHostKeyChecking=yes \
                             ec2-user@10.0.1.228 \
                             "hostname && whoami"
                     '''
                 }
             }
         }
+
+        stage('Deploy to Application EC2') {
+            steps {
+                echo 'Deploying new Docker image to Application EC2'
+
+                sshagent(credentials: ['app-ec2-ssh']) {
+                    sh '''
+                ssh -o StrictHostKeyChecking=yes \
+                    -o UserKnownHostsFile=/var/lib/jenkins/.ssh/known_hosts \
+                    ec2-user@10.0.1.228 \
+                    "set -e;
+                     docker pull devenvsatish/catch-pokemon:${BUILD_NUMBER};
+                     docker rm -f catch-pokemon 2>/dev/null || true;
+                     docker run -d \
+                         --name catch-pokemon \
+                         -p 80:80 \
+                         --restart unless-stopped \
+                         devenvsatish/catch-pokemon:${BUILD_NUMBER};
+                     docker ps --filter name=catch-pokemon"
+            '''
+                }
+            }
+        }
+
     }
 
     post {
