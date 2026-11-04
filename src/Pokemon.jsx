@@ -4,7 +4,7 @@ import "./index.css";
 
 const API = "https://pokeapi.co/api/v2/pokemon?limit=200";
 
-export const Pokemon = () => {
+export const Pokemon = ({ onHome }) => {
   const [pokemon, setPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,23 +49,36 @@ export const Pokemon = () => {
 
   if (loading) {
     return (
-      <div>
-        <h1>Loading...</h1>
+      <div className="container pokedex-page">
+        <header className="pokedex-header">
+          <button className="home-link" onClick={onHome} type="button">
+            ← Home
+          </button>
+          <h1>Loading...</h1>
+        </header>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div>
-        <h1>Error: {error.message}</h1>
+      <div className="container pokedex-page">
+        <header className="pokedex-header">
+          <button className="home-link" onClick={onHome} type="button">
+            ← Home
+          </button>
+          <h1>Error: {error.message}</h1>
+        </header>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <header>
+    <div className="container pokedex-page">
+      <header className="pokedex-header">
+        <button className="home-link" onClick={onHome} type="button">
+          ← Home
+        </button>
         <h1>Let's Catch Pokémon </h1>
       </header>
 
