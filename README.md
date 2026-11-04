@@ -12,6 +12,7 @@ A React project to fetch and display Pokémon data using the PokéAPI. The app f
 - Displays Pokémon cards with images, types, stats, and abilities
 - Responsive grid layout for cards
 - Search bar to filter Pokémon by name
+- Pokémon detail pages with PokéAPI data and TMDB trailers/clips
 - Clean and modern UI with CSS Grid and Flexbox
 
 ## Getting Started
@@ -38,7 +39,16 @@ A React project to fetch and display Pokémon data using the PokéAPI. The app f
    yarn install
    ```
 
-3. Start the development server:
+3. Configure the TMDB API key. Copy `.env.example` to `.env.local` and set `VITE_TMDB_API_KEY` to your TMDB v3 API key.
+
+   ```env
+   VITE_TMDB_API_KEY=your_tmdb_v3_api_key
+   ```
+
+   This browser-based app uses the v3 API key, which is visible in the built frontend. Do not use a private TMDB read access token here.
+   TMDB provides title/video metadata; clips play from YouTube. The app searches for Pokémon titles that mention the selected Pokémon by name. TMDB does not provide a character-to-video relationship, so many Pokémon will have no matching clips.
+
+4. Start the development server:
 
    ```sh
    npm run dev
@@ -46,7 +56,9 @@ A React project to fetch and display Pokémon data using the PokéAPI. The app f
    yarn dev
    ```
 
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
+5. Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+For Jenkins/Docker deployment, add a Jenkins **Secret text** credential with ID `tmdb-api-key` and the v3 API key as its value. The Docker build passes it to Vite; the key will be public in the static frontend bundle.
 
 ## Project Structure
 
@@ -67,6 +79,7 @@ Catch Pokemon/
 ## API Reference
 
 - [PokéAPI](https://pokeapi.co/)
+- [The Movie Database (TMDB) API](https://developer.themoviedb.org/)
 
 ## Notes & Learning Points
 

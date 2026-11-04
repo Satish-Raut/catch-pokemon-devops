@@ -32,14 +32,23 @@ pipeline {
             steps {
                 echo 'Building Docker image'
 
-                sh '''
-                    docker build \
-                        -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                withCredentials([
+                    string(
+                        credentialsId: 'tmdb-api-key',
+                        variable: 'TMDB_API_KEY'
+                    )
+                ]) {
+                    sh '''
+                        set +x
+                        docker build \
+                            --build-arg VITE_TMDB_API_KEY="$TMDB_API_KEY" \
+                            -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
 
-                    docker tag \
-                        ${DOCKER_IMAGE}:${BUILD_NUMBER} \
-                        ${DOCKER_IMAGE}:latest
-                '''
+                        docker tag \
+                            ${DOCKER_IMAGE}:${BUILD_NUMBER} \
+                            ${DOCKER_IMAGE}:latest
+                    '''
+                }
             }
         }
 

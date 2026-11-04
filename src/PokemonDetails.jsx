@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { PokemonClips } from "./PokemonClips";
 
 const typeColors = {
   bug: "#8a9b39",
@@ -300,6 +301,8 @@ export const PokemonDetails = ({ pokemon, details, loading, error, onClose, onRe
               </details>
             </div>
           )}
+
+          <PokemonClips pokemonName={pokemon.name} />
         </div>
       </div>
     </dialog>

@@ -14,6 +14,10 @@ RUN npm ci
 #* Copies the remaining application source code into the container.
 COPY . .
 
+# TMDB's v3 API key is public in a browser build; provide it at build time.
+ARG VITE_TMDB_API_KEY
+ENV VITE_TMDB_API_KEY=${VITE_TMDB_API_KEY}
+
 #* Executes the build script defined in your package.json.
 #* This converts your development application into optimized production files into a 'dist' folder.
 RUN npm run build
@@ -25,4 +29,3 @@ FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
-
