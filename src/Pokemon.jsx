@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PokemonCards } from "./PokemonCards";
+import { PokemonDetails } from "./PokemonDetails";
 import "./index.css";
 
 const API = "https://pokeapi.co/api/v2/pokemon?limit=200";
@@ -25,6 +26,23 @@ export const Pokemon = ({ onHome }) => {
   const [detailAttempt, setDetailAttempt] = useState(0);
   const normalizedSearch = search.trim().toLowerCase();
   const detailCache = useRef(new Map());
+  const modalRequest = useRef(0);
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [selectedPokemonDetails, setSelectedPokemonDetails] = useState(null);
+  const [selectedPokemonLoading, setSelectedPokemonLoading] = useState(false);
+  const [selectedPokemonError, setSelectedPokemonError] = useState("");
+
+  const fetchCached = useCallback((url) => {
+    if (!detailCache.current.has(url)) {
+      const request = fetchJson(url).catch((fetchError) => {
+        detailCache.current.delete(url);
+        throw fetchError;
+      });
+      detailCache.current.set(url, request);
+    }
+
+    return detailCache.current.get(url);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -71,16 +89,7 @@ export const Pokemon = ({ onHome }) => {
     setError("");
 
     Promise.all(
-      pageEntries.map(async (entry) => {
-        if (!detailCache.current.has(entry.url)) {
-          const detailRequest = fetchJson(entry.url).catch((fetchError) => {
-            detailCache.current.delete(entry.url);
-            throw fetchError;
-          });
-          detailCache.current.set(entry.url, detailRequest);
-        }
-        return detailCache.current.get(entry.url);
-      }),
+      pageEntries.map((entry) => fetchCached(entry.url)),
     )
       .then((details) => {
         if (active) setPagePokemon(details);
@@ -98,7 +107,47 @@ export const Pokemon = ({ onHome }) => {
     return () => {
       active = false;
     };
-  }, [detailAttempt, indexLoading, pageEntries, pokemonIndex.length]);
+  }, [detailAttempt, fetchCached, indexLoading, pageEntries, pokemonIndex.length]);
+
+  const openPokemonDetails = async (pokemon) => {
+    const requestId = modalRequest.current + 1;
+    modalRequest.current = requestId;
+    setSelectedPokemon(pokemon);
+    setSelectedPokemonDetails(null);
+    setSelectedPokemonLoading(true);
+    setSelectedPokemonError("");
+
+    try {
+      const [species, types, abilities] = await Promise.all([
+        fetchCached(pokemon.species.url),
+        Promise.all(pokemon.types.map(({ type }) => fetchCached(type.url))),
+        Promise.all(pokemon.abilities.map(({ ability }) => fetchCached(ability.url))),
+      ]);
+      const evolutionChain = species.evolution_chain?.url
+        ? await fetchCached(species.evolution_chain.url)
+        : null;
+
+      if (modalRequest.current === requestId) {
+        setSelectedPokemonDetails({ species, types, abilities, evolutionChain });
+      }
+    } catch (fetchError) {
+      if (modalRequest.current === requestId) {
+        setSelectedPokemonError(fetchError.message);
+      }
+    } finally {
+      if (modalRequest.current === requestId) {
+        setSelectedPokemonLoading(false);
+      }
+    }
+  };
+
+  const closePokemonDetails = () => {
+    modalRequest.current += 1;
+    setSelectedPokemon(null);
+    setSelectedPokemonDetails(null);
+    setSelectedPokemonError("");
+    setSelectedPokemonLoading(false);
+  };
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
@@ -201,7 +250,11 @@ export const Pokemon = ({ onHome }) => {
       ) : (
         <ul className="cards">
           {pagePokemon.map((pokemon) => (
-            <PokemonCards key={pokemon.id} pokemonData={pokemon} />
+            <PokemonCards
+              key={pokemon.id}
+              onSelect={openPokemonDetails}
+              pokemonData={pokemon}
+            />
           ))}
         </ul>
       )}
@@ -239,6 +292,17 @@ export const Pokemon = ({ onHome }) => {
             Next →
           </button>
         </nav>
+      )}
+
+      {selectedPokemon && (
+        <PokemonDetails
+          details={selectedPokemonDetails}
+          error={selectedPokemonError}
+          loading={selectedPokemonLoading}
+          onClose={closePokemonDetails}
+          onRetry={() => openPokemonDetails(selectedPokemon)}
+          pokemon={selectedPokemon}
+        />
       )}
     </div>
   );
