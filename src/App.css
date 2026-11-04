@@ -325,6 +325,25 @@
   animation: float-pokemon 4s ease-in-out infinite;
 }
 
+.artwork-fallback {
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffffffa6;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #fffefa 0 17%, transparent 18%),
+    radial-gradient(circle, #e0ead9 0 53%, #edf2e8 54% 70%, transparent 71%);
+  color: var(--color-accent);
+}
+
+.artwork-fallback > span {
+  font-size: 30px;
+}
+
+.hero-pokemon.artwork-fallback {
+  aspect-ratio: 1;
+}
+
 .art-caption {
   position: absolute;
   top: 12%;
@@ -502,7 +521,7 @@
   letter-spacing: 1px;
 }
 
-.starter-card img {
+.starter-card .starter-pokemon {
   width: 105px;
   height: 105px;
   margin: 14px 0 0 auto;
@@ -511,7 +530,8 @@
   transition: transform 180ms ease;
 }
 
-.starter-card:hover img {
+.starter-card:hover .starter-pokemon,
+.starter-card:hover .artwork-fallback {
   transform: scale(1.07) rotate(3deg);
 }
 
@@ -547,6 +567,224 @@
   border-radius: 50%;
   color: #637865;
   font-size: 12px;
+}
+
+.discover-section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 31px 0 42px;
+  border-top: 1px solid var(--color-line);
+}
+
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.discover-card {
+  position: relative;
+  display: flex;
+  min-height: 225px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 22px 14px 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.discover-card::before {
+  position: absolute;
+  top: 34px;
+  width: 142px;
+  height: 142px;
+  border: 1px solid #ffffff99;
+  border-radius: 50%;
+  content: "";
+}
+
+.discover-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px #202b2612;
+}
+
+.discover-card.lavender {
+  border-color: #e8e2ef;
+  background: linear-gradient(145deg, #f3eff7, #eae5f1);
+}
+
+.discover-card.lilac {
+  border-color: #e3deed;
+  background: linear-gradient(145deg, #eeebf5, #e4e0ef);
+}
+
+.discover-card.sage {
+  border-color: #e0e8df;
+  background: linear-gradient(145deg, #edf2e9, #e2ebdf);
+}
+
+.discover-card.butter {
+  border-color: #eee8d8;
+  background: linear-gradient(145deg, #f6f1e4, #efe8d8);
+}
+
+.discover-number {
+  position: absolute;
+  top: 14px;
+  left: 15px;
+  color: #78827b;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.discover-card .discover-pokemon {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 7px #202b261c);
+  transition: transform 180ms ease;
+}
+
+.discover-card .artwork-fallback.discover-pokemon {
+  position: relative;
+  width: 145px;
+  height: 145px;
+  flex: 0 0 145px;
+  background:
+    radial-gradient(circle, #fffefa 0 18%, transparent 19%),
+    radial-gradient(circle, #ffffff80 0 55%, transparent 56%);
+}
+
+.discover-card:hover .discover-pokemon,
+.discover-card:hover .artwork-fallback {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+.discover-info {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: end;
+  justify-content: space-between;
+  margin-top: 7px;
+}
+
+.discover-info h3 {
+  color: var(--color-ink);
+  font-family: "Urbanist", sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+}
+
+.discover-info p {
+  margin-top: 3px;
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+.discover-info > span {
+  color: var(--color-accent);
+  font-size: 15px;
+}
+
+.field-guide-section {
+  max-width: 1120px;
+  margin: 0 auto 39px;
+  padding: 35px 32px 32px;
+  border: 1px solid #e6e9df;
+  border-radius: 13px;
+  background:
+    radial-gradient(ellipse at 92% 8%, #e8efe2 0, transparent 34%),
+    #f2f4ed;
+  text-align: center;
+}
+
+.field-guide-heading .section-kicker {
+  justify-content: center;
+}
+
+.field-guide-heading h2 {
+  margin-top: 10px;
+  color: var(--color-ink);
+  font-family: "Urbanist", sans-serif;
+  font-size: clamp(24px, 3.5vw, 34px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+.field-guide-heading h2 span {
+  color: var(--color-accent);
+  font: inherit;
+}
+
+.field-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+  text-align: left;
+}
+
+.guide-card {
+  min-height: 186px;
+  padding: 17px;
+  border: 1px solid #e6e9df;
+  border-radius: 9px;
+  background: #fffefa;
+}
+
+.guide-icon {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  margin-bottom: 16px;
+  border-radius: 9px;
+  background: #eaf0e5;
+  color: var(--color-accent);
+  font-size: 20px;
+}
+
+.stat-icon {
+  background: #f5eee1;
+  color: #a27845;
+}
+
+.heart-icon {
+  background: #f5eae5;
+  color: #bf7862;
+}
+
+.guide-step {
+  color: #899188;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.guide-card h3 {
+  margin-top: 7px;
+  color: var(--color-ink);
+  font-family: "Urbanist", sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.guide-card p {
+  margin-top: 6px;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.guide-cta {
+  margin-top: 23px;
 }
 
 .about-strip {
@@ -736,11 +974,43 @@
     gap: 11px;
   }
 
+  .discover-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+  }
+
+  .discover-card {
+    min-height: 205px;
+  }
+
+  .field-guide-section {
+    padding: 28px 17px 24px;
+  }
+
+  .field-guide-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .guide-card {
+    min-height: auto;
+  }
+
+  .guide-icon {
+    margin-bottom: 10px;
+  }
+
+  .guide-cta {
+    width: 100%;
+    padding: 0 10px;
+  }
+
   .starter-card {
     min-height: 128px;
   }
 
-  .starter-card img {
+  .starter-card .starter-pokemon {
     width: 95px;
     height: 95px;
   }

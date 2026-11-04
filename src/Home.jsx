@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const featuredPokemon = [
   {
     name: "Bulbasaur",
@@ -25,6 +27,61 @@ const featuredPokemon = [
   },
 ];
 
+const PokemonImage = ({ src, alt, className, loading = "lazy", priority = false }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <span className={`artwork-fallback ${className}`} role="img" aria-label={`${alt} artwork unavailable`}>
+        <span aria-hidden="true">✦</span>
+      </span>
+    );
+  }
+
+  return (
+    <img
+      alt={alt}
+      className={className}
+      decoding="async"
+      fetchPriority={priority ? "high" : "auto"}
+      loading={loading}
+      onError={() => setFailed(true)}
+      src={src}
+    />
+  );
+};
+
+const morePokemon = [
+  {
+    name: "Eevee",
+    detail: "A friend for every kind of adventure",
+    image:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png",
+    color: "lavender",
+  },
+  {
+    name: "Gengar",
+    detail: "A little mischief after dark",
+    image:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png",
+    color: "lilac",
+  },
+  {
+    name: "Snorlax",
+    detail: "Big naps, even bigger heart",
+    image:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png",
+    color: "sage",
+  },
+  {
+    name: "Dragonite",
+    detail: "A gentle giant with sky-high dreams",
+    image:
+      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/149.png",
+    color: "butter",
+  },
+];
+
 export const Home = ({ onExplore }) => {
   return (
     <main className="home-page">
@@ -38,6 +95,7 @@ export const Home = ({ onExplore }) => {
         <nav className="home-nav-links" aria-label="Main navigation">
           <a className="active" href="#home">Home</a>
           <a href="#starters">Starters</a>
+          <a href="#discover">Discover</a>
           <a href="#about">About</a>
         </nav>
         <button className="nav-cta" onClick={onExplore} type="button">
@@ -74,10 +132,12 @@ export const Home = ({ onExplore }) => {
             <span className="caption-dot" />
             <span>YOUR ADVENTURE<br /><strong>BEGINS WITH A HELLO</strong></span>
           </div>
-          <img
-            className="hero-pokemon"
-            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
+          <PokemonImage
             alt="Pikachu, the Electric Mouse Pokémon"
+            className="hero-pokemon"
+            loading="eager"
+            priority
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png"
           />
           <div className="hero-pokemon-label">
             <span className="label-number">NO. 025</span>
@@ -102,7 +162,12 @@ export const Home = ({ onExplore }) => {
           {featuredPokemon.map((pokemon) => (
             <article className={`starter-card ${pokemon.color}`} key={pokemon.name}>
               <span className="starter-number">NO. {pokemon.number}</span>
-              <img src={pokemon.image} alt={pokemon.name} loading="lazy" />
+              <PokemonImage
+                src={pokemon.image}
+                alt={pokemon.name}
+                className="starter-pokemon"
+                loading="eager"
+              />
               <div className="starter-info">
                 <div>
                   <h3>{pokemon.name}</h3>
@@ -113,6 +178,64 @@ export const Home = ({ onExplore }) => {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="discover-section" id="discover">
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">THE WORLD IS FULL OF SURPRISES</p>
+            <h2>There are more friends to meet</h2>
+          </div>
+          <button className="all-pokemon-link" onClick={onExplore} type="button">
+            Open the Pokédex <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+
+        <div className="discover-grid">
+          {morePokemon.map((pokemon, index) => (
+            <article className={`discover-card ${pokemon.color}`} key={pokemon.name}>
+              <span className="discover-number">FIELD NOTE 0{index + 1}</span>
+              <PokemonImage src={pokemon.image} alt={pokemon.name} className="discover-pokemon" />
+              <div className="discover-info">
+                <div>
+                  <h3>{pokemon.name}</h3>
+                  <p>{pokemon.detail}</p>
+                </div>
+                <span aria-hidden="true">✦</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="field-guide-section">
+        <div className="field-guide-heading">
+          <p className="section-kicker">A POCKET-SIZED FIELD GUIDE</p>
+          <h2>Every Pokémon has a story.<br /><span>Find the details that surprise you.</span></h2>
+        </div>
+        <div className="field-guide-grid">
+          <article className="guide-card">
+            <span className="guide-icon search-icon" aria-hidden="true">⌕</span>
+            <span className="guide-step">01 / LOOK CLOSER</span>
+            <h3>Search your curiosity</h3>
+            <p>Have a name in mind? Search the Pokédex and find them in a moment.</p>
+          </article>
+          <article className="guide-card">
+            <span className="guide-icon stat-icon" aria-hidden="true">↗</span>
+            <span className="guide-step">02 / GET TO KNOW THEM</span>
+            <h3>Compare the details</h3>
+            <p>Discover each Pokémon’s type, height, weight, speed, and attack.</p>
+          </article>
+          <article className="guide-card">
+            <span className="guide-icon heart-icon" aria-hidden="true">♡</span>
+            <span className="guide-step">03 / PICK A FAVORITE</span>
+            <h3>Follow your feeling</h3>
+            <p>From tiny and speedy to big and sleepy, there’s a Pokémon for you.</p>
+          </article>
+        </div>
+        <button className="primary-cta guide-cta" onClick={onExplore} type="button">
+          Start your Pokédex adventure <span aria-hidden="true">→</span>
+        </button>
       </section>
 
       <section className="about-strip" id="about">
