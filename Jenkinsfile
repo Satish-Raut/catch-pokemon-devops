@@ -66,11 +66,24 @@ pipeline {
                 }
             }
         }
+
+        // NEW STAGE: Test SSH connection to Application EC2
+        stage('Test SSH Connection') {
+            steps {
+                sshagent(credentials: ['app-ec2-ssh']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=accept-new \
+                            ec2-user@10.0.1.228 \
+                            "hostname && whoami"
+                    '''
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'SUCCESS: Docker image built and pushed to Docker Hub!'
+            echo 'SUCCESS: Docker image built, pushed and SSH connection verified!'
         }
 
         failure {
