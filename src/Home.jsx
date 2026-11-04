@@ -245,12 +245,14 @@ export const Home = ({ onExplore }) => {
       </section>
 
       <footer className="home-footer">
-        <a className="home-brand footer-brand" href="#home">
+        <div className="footer-topline">
+          <p>A little adventure, powered by PokéAPI.</p>
+          <span className="footer-tag">GOTTA FIND YOUR FAVORITE ✦</span>
+        </div>
+        <a className="footer-wordmark" href="#home" aria-label="Pokéworld home">
           <span className="pokeball-mark" aria-hidden="true"><span /></span>
-          <span>poké<span>world</span></span>
+          <span className="footer-wordmark-text">poké<span>world</span></span>
         </a>
-        <p>A little adventure, powered by PokéAPI.</p>
-        <span className="footer-tag">GOTTA FIND YOUR FAVORITE ✦</span>
       </footer>
     </main>
   );
